@@ -39,7 +39,7 @@ $script_dir/4_run_vm_scripts.sh
 mv /var/lib/libvirt/images/ubuntu-16.04-server-cloudimg-amd64-disk1.img $script_dir/../uc_netronome/netronome_perf.img 
 ```
 
-## 2) Copy image to Undercloud
+## 2) Copy image and UC scripts to Undercloud
 
 
 ```
