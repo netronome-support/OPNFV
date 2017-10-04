@@ -56,4 +56,9 @@ if [ "$VXLAN" == "y" ]; then
 /root/dpdk-pktgen $lcores --proc-type auto $memory -n 4 --log-level=7 $whitelist --file-prefix=dpdk0_ -- $mapping -N -f $script_dir/unidirectional_transmitter_vxlan.lua
 fi
 
+if [ "$VXLAN" == "i" ]; then
+/root/dpdk-pktgen $lcores --proc-type auto $memory -n 4 --log-level=7 $whitelist --file-prefix=dpdk0_ -- $mapping -N
+fi
+
+
 reset
