@@ -55,13 +55,76 @@ scp -r $script_dir/uc_netronome stack@$ip:/home/stack/
 ```
 
 ## 3) Import image into OPNFV
+```
+#!/bin/bash
+. $HOME/adminrc 
 
+script_dir="$(dirname $(readlink -f $0))"
+openstack image create "netronome_perf" --disk-format qcow2 \
+--container-format bare \
+--public --file $script_dir/netronome_perf.img
+
+openstack image list | grep netronome_perf
+```
 
 ## 4) Create flavor
+```
+#!/bin/bash
 
+. $HOME/adminrc
+
+openstack flavor create --ram 4096 --disk 8 --vcpus 4 netronome_perf --property hw_cpu_policy=dedicated \
+--property hw_cpu_thread_policy=isolate
+
+nova flavor-key netronome_perf set hw:mem_page_size=2048
+
+openstack flavor list | grep netronome_perf
+```
 
 ## 5) Create VMs using above image
 
+Create Guest machines with the following script:
+```
+./2_create_opnfv_vm.sh [VM Name] [Availability zone]
+```
+
+
+```
+if [ -z "$1" ]; then
+ echo "Please specify vm name"
+ exit -1
+fi
+
+if [ -z "$2" ]; then
+ echo "Please specify availability zone"
+ exit -1
+fi
+
+set -xe
+
+. $HOME/adminrc
+
+#VNIC_MODE=direct
+#VNIC_MODE=virtio-forwarder
+VNIC_MODE=direct
+FLAVOR=netronome_perf
+#IMAGE=cirros
+IMAGE=netronome_perf
+#IMAGE=ubuntu_vanilla
+NET=selfservice
+PORT_NAME=demo_${VNIC_MODE}_$1
+INSTANCE_NAME=$1
+
+
+
+net_id=`neutron net-show ${NET} | grep "\ id\ " | awk '{ print $4 }'`
+port_id0=`neutron port-create $net_id --name ${PORT_NAME}_0 | grep "\ id\ " | awk '{ print $4 }'`
+port_id1=`neutron port-create $net_id --name ${PORT_NAME}_1 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
+
+#port_id2=`neutron port-create $net_id --name ${PORT_NAME}_2 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
+openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port_id0} --nic port-id=${port_id1} --security-group default --key markey ${INSTANCE_NAME} --availability-zone nova:overcloud-novacompute-$2.netronome.com
+
+```
 
 ## 6) Attach floating IP
 
