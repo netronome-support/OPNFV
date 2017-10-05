@@ -66,10 +66,26 @@ scp -r $script_dir/uc_netronome stack@$ip:/home/stack/
 ./3_login_undercloud.sh
 cd uc_netronome
 ```
+You will find the weaponized image along with some uc scripts here:
+```
+# ls
+
+0_create_key.sh    2_create_flavor.sh    4_attach_floating_ip.sh    6_create_vm_ssh_script.sh
+1_import_image.sh  3_create_opnfv_vm.sh  5_create_uc_ssh_script.sh  netronome_perf.img
+```
+
 
 ## 5) Create key pair
 ```
 ./0_create_key.sh
+
++--------+-------------------------------------------------+
+| Name   | Fingerprint                                     |
++--------+-------------------------------------------------+
+| markey | 11:b6:6f:06:6a:c1:90:e6:a1:eb:91:ed:ce:dc:cd:1f |
++--------+-------------------------------------------------+
+
+
 ```
 
 ## 6) Import image into OPNFV
@@ -78,14 +94,15 @@ cd uc_netronome
 ```
 ```
 #!/bin/bash
-. $HOME/adminrc 
+. $HOME/adminrc
 
+echo "Importing netronome_perf"
 script_dir="$(dirname $(readlink -f $0))"
-openstack image create "netronome_perf" --disk-format qcow2 \
---container-format bare \
---public --file $script_dir/netronome_perf.img
+
+glance image-create --name netronome_perf --file $script_dir/netronome_perf.img --disk-format qcow2 --container-format bare --progress --visibility public
 
 openstack image list | grep netronome_perf
+
 ```
 
 ## 7) Create flavor
@@ -109,7 +126,12 @@ openstack flavor list | grep netronome_perf
 
 * Create Guest machines with the following script:
 ```
+#usage
 ./3_create_opnfv_vm.sh [VM Name] [Availability zone]
+
+#example
+./3_create_opnfv_vm.sh vm0 0
+./3_create_opnfv_vm.sh vm1 1
 ```
 
 
@@ -150,7 +172,12 @@ port_id1=`neutron port-create $net_id --name ${PORT_NAME}_1 --binding:vnic_type 
 
 openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port_id0} --nic port-id=${port_id1} --security-group default --key markey ${INSTANCE_NAME} --availability-zone nova:$HYPERVISOR$2.netronome.com
 
+```
 
+* Wait for VMs to boot
+
+```
+watch -d openstack server list
 ```
 
 ## 9) Attach floating IP
@@ -158,7 +185,12 @@ openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port
 * Attach floating IP to enable access from external network
 
 ```
+#usage
 ./4_attach_floating_ip.sh [Instance name]
+
+#example
+./4_attach_floating_ip.sh vm0
+./4_attach_floating_ip.sh vm1
 ```
 
 ```
@@ -180,9 +212,14 @@ openstack server list | grep $1
 
 ## 10) SSH to VMs
 
-Create SSH scripts using:
+* Create SSH scripts using:
 ```
+#usage
 ./6_create_vm_ssh_script [Instance name]
+
+#example
+./6_create_vm_ssh_script vm0
+./6_create_vm_ssh_script vm1
 ```
 
 ```
@@ -216,6 +253,25 @@ chmod a+x ssh_to_$1
 ```
 
 New ssh_to*.sh script files should be created in the script directory. Execute the scripts to connect to the respective VMs.
+```
+./ssh_to_vm0
+./ssh_to_vm1
+```
+
+> NOTE: If you see the following message
+```
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+...
+Offending ECDSA key in /home/stack/.ssh/known_hosts:**10**
+...
+
+```
+Delete the existing host key with the following command:
+```
+sed -i **10**d ~/.ssh/known_hosts
+```
 
 ## 11) Run dpdk-pktgen
 
