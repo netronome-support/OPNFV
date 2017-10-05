@@ -11,7 +11,7 @@ script_dir="$(dirname $(readlink -f $0))"
 . $HOME/stackrc 
 
 
-ip=`openstack server list | awk '/'"overcloud-novacompute-$1"'/{print $8}' | cut -d"=" -f2`
+ip=`openstack server list | awk '/'"$hypervisor$1"'/{print $8}' | cut -d"=" -f2`
 
 if [ -z "$ip" ]; then
  echo "Instance doesn't exist: $1"
