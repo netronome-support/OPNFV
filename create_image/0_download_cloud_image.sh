@@ -3,6 +3,8 @@
 #This script will download a ubuntu cloud image (300Mb) and save it in /var/lib/libvirt/images/
 #It will create a copy of the cloud image as a backup with the suffix .copy
 
+echo "Downloading cloud image"
+
 GREEN='\033[0;32m'
 NC='\033[0m'
 RED='\033[0;31m'

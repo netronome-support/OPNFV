@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Creating base VM"
+
 #Install backing VM
 VM_NAME=ubuntu_backing
 
