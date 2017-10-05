@@ -3,15 +3,21 @@
 ## 0) Clone this repository locally on Jumphost
 ```
 git clone https://github.com/netronome-support/OPNFV.git
+cd OPNFV
 ```
 
 ## 1) Create weaponized image
 
-Create an image that contains dpdk-apps
+* Install virtualization dependencies
+```
+./0_install_virtualization_deps.sh
+```
+* Create an image which contains dpdk-apps
 
->NOTE: Scripts directory: create_image
-
-0_create_netronome_image.sh
+>NOTE: Individual scripts directory: create_image
+```
+./1_create_netronome_image.sh
+```
 ```
 #!/bin/bash
 
@@ -39,9 +45,11 @@ $script_dir/4_run_vm_scripts.sh
 mv /var/lib/libvirt/images/ubuntu-16.04-server-cloudimg-amd64-disk1.img $script_dir/../uc_netronome/netronome_perf.img 
 ```
 
-## 2) Copy the newly crated image and UC scripts to the Undercloud
+## 2) Copy the newly created image(netronome_perf.img) and UC scripts to the Undercloud
 
-
+```
+./2_copy_files.sh
+```
 ```
 #!/bin/bash
 
@@ -53,7 +61,21 @@ script_dir="$(dirname $(readlink -f $0))"
 scp -r $script_dir/uc_netronome stack@$ip:/home/stack/
 ```
 
-## 3) Import image into OPNFV
+## 3) Log into Undercloud and browse to script directory
+```
+./3_login_undercloud.sh
+cd uc_netronome
+```
+
+## 5) Create key pair
+```
+./0_create_key.sh
+```
+
+## 6) Import image into OPNFV
+```
+./1_import_image.sh
+```
 ```
 #!/bin/bash
 . $HOME/adminrc 
@@ -66,7 +88,10 @@ openstack image create "netronome_perf" --disk-format qcow2 \
 openstack image list | grep netronome_perf
 ```
 
-## 4) Create flavor
+## 7) Create flavor
+```
+./2_create_flavor.sh
+```
 ```
 #!/bin/bash
 
@@ -80,15 +105,17 @@ nova flavor-key netronome_perf set hw:mem_page_size=2048
 openstack flavor list | grep netronome_perf
 ```
 
-## 5) Create VMs using above image
+## 8) Create VMs using imported image
 
-Create Guest machines with the following script:
+* Create Guest machines with the following script:
 ```
 ./3_create_opnfv_vm.sh [VM Name] [Availability zone]
 ```
 
 
 ```
+#!/bin/bash
+
 if [ -z "$1" ]; then
  echo "Please specify vm name"
  exit -1
@@ -126,9 +153,13 @@ openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port
 
 ```
 
-## 6) Attach floating IP
+## 9) Attach floating IP
 
-Attach floating IP to enable access from external network
+* Attach floating IP to enable access from external network
+
+```
+./4_attach_floating_ip.sh [Instance name]
+```
 
 ```
 #!/bin/bash
@@ -147,7 +178,7 @@ openstack server list | grep $1
 
 ```
 
-## 7) SSH to VMs
+## 10) SSH to VMs
 
 Create SSH scripts using:
 ```
@@ -186,7 +217,7 @@ chmod a+x ssh_to_$1
 
 New ssh_to*.sh script files should be created in the script directory. Execute the scripts to connect to the respective VMs.
 
-## 8) Run dpdk-pktgen
+## 11) Run dpdk-pktgen
 
 Once in the VM, switch to root and navigate to the DPDK-pktgen folder.
 
@@ -205,7 +236,7 @@ Launch pktgen
 ```
 cd 
 ```
-## 9) Configure L2 addresses
+## 10) Configure L2 addresses
 
 
 
