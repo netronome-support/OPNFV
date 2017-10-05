@@ -31,6 +31,7 @@ set -xe
 #VNIC_MODE=virtio-forwarder
 VNIC_MODE=direct
 FLAVOR=netronome_perf
+HYPERVISOR=overcloud-novacompute-
 #IMAGE=cirros
 IMAGE=netronome_perf
 #IMAGE=ubuntu_vanilla
@@ -45,7 +46,7 @@ port_id0=`neutron port-create $net_id --name ${PORT_NAME}_0 | grep "\ id\ " | aw
 port_id1=`neutron port-create $net_id --name ${PORT_NAME}_1 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
 
 #port_id2=`neutron port-create $net_id --name ${PORT_NAME}_2 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
-openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port_id0} --nic port-id=${port_id1} --security-group default --key markey ${INSTANCE_NAME} --availability-zone nova:overcloud-novacompute-$2.netronome.com
+openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port_id0} --nic port-id=${port_id1} --security-group default --key markey ${INSTANCE_NAME} --availability-zone nova:$HYPERVISOR$2.netronome.com
 
 
 

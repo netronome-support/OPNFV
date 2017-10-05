@@ -11,6 +11,15 @@ if [ -f markey.pem ]; then
 	exit 1	
 fi
 
+exists=`openstack keypair list | grep markey`
+
+if [ ! -z "$exists" ]; then
+        echo -e "${GREEN}markey already exists${NC}"
+	echo "Exiting"	
+        exit 1
+fi
+
+
 openstack keypair create markey > markey.pem
 chmod 600 markey.pem
 openstack keypair list
