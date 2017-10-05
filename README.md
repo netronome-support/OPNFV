@@ -1,6 +1,6 @@
 # OPNFV - performance setup scripts
 
-## 0) Clone this repository locally on Jumphost
+## 0) Clone this repository locally on the Jumphost
 ```
 git clone https://github.com/netronome-support/OPNFV.git
 cd OPNFV
@@ -264,13 +264,13 @@ New ssh_to*.sh script files should be created in the script directory. Execute t
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ...
-Offending ECDSA key in /home/stack/.ssh/known_hosts:**10**
+Offending ECDSA key in /home/stack/.ssh/known_hosts:10
 ...
 
 ```
 Delete the existing host key with the following command:
 ```
-sed -i **10**d ~/.ssh/known_hosts
+sed -i 10d ~/.ssh/known_hosts
 ```
 
 ## 11) Run dpdk-pktgen
@@ -282,7 +282,7 @@ sudo -i
 cd vm_scripts/samples/DPDK-pktgen/
 ```
 
-Assign hugepages and bing the igb_uio driver to the Netronome interfaces.
+Assign hugepages and bind the igb_uio driver to the Netronome interfaces.
 ```
 ./1_configure_hugepages.sh
 ./2_auto_bind_igb_uio.sh
@@ -290,9 +290,9 @@ Assign hugepages and bing the igb_uio driver to the Netronome interfaces.
 
 Launch pktgen
 ```
-cd 
+./3_run_dpdk-pktgen.sh
 ```
-## 10) Configure L2 addresses
+## 13) Configure L2 addresses
 
 
 
