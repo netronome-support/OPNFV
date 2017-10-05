@@ -273,7 +273,10 @@ Delete the existing host key with the following command:
 sed -i 10d ~/.ssh/known_hosts
 ```
 
-## 11) Run dpdk-pktgen
+## 11) Configure VM vCPU pinning
+
+
+## 12) Run dpdk-pktgen
 
 Once in the VM, switch to root and navigate to the DPDK-pktgen folder.
 
