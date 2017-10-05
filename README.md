@@ -210,9 +210,61 @@ openstack server list | grep $1
 
 ```
 
-## 10) SSH to VMs
+## 10) Configure VM vCPU pinning
 
-* Create SSH scripts using:
+* Create compute SSH scripts
+```
+#usage
+5_create_uc_ssh_script.sh [Zone ID]
+
+#example
+5_create_uc_ssh_script.sh 0
+5_create_uc_ssh_script.sh 1
+```
+* Connect to computes
+```
+ssh_to_overcloud-novacompute-0
+ssh_to_overcloud-novacompute-1
+```
+
+* Determine NUMA node linked to card
+```
+for card in /sys/bus/pci/drivers/nfp/0*; do
+    address=`basename $card`
+    echo "Agilio address: $address"
+    echo -n "NUMA node: "; cat $card/numa_node
+    echo -n "Local CPUs: "; cat $card/local_cpulist
+done
+```
+
+* Display current pinning
+```
+sudo -i
+virsh list
+
+#example output:
+
+ Id    Name                           State
+----------------------------------------------------
+ 21    instance-000000d7              running
+
+#display pinning of instance
+virsh vcpupin 21
+
+#pin  vCPUs if required
+virsh vcpupin 21 [vcpu] [cpu]
+
+#example
+virsh vcpupin 21 0 3
+virsh vcpupin 21 1 4
+virsh vcpupin 21 2 5
+virsh vcpupin 21 3 6
+```
+
+
+## 11) SSH to VMs
+
+* Create VM SSH scripts using
 ```
 #usage
 ./6_create_vm_ssh_script [Instance name]
@@ -272,9 +324,6 @@ Delete the existing host key with the following command:
 ```
 sed -i 10d ~/.ssh/known_hosts
 ```
-
-## 11) Configure VM vCPU pinning
-
 
 ## 12) Run dpdk-pktgen
 
