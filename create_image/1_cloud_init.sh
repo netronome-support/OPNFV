@@ -2,6 +2,8 @@
 
 #Cloud init script
 
+echo "Configuring cloud init"
+
 script_dir="$(dirname $(readlink -f $0))"
 VM_NAME=ubuntu_backing
 
