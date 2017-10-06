@@ -355,11 +355,61 @@ Configure destination L2 addresses - This script will help with that
 ./7_generate_pktgen_cmds.sh7_generate_pktgen_cmds.sh vm0 vm1
 ```
 
+Example output
+```
+-----------------------------------
+Host0: vm0
+-----------------------------------
+IPv4 address: 192.168.42.23
+MAC address: fa:16:3e:68:94:ca
+-----------------------------------
+-----------------------------------
+Host1: vm1
+-----------------------------------
+IPv4 address: 192.168.42.36
+MAC address: fa:16:3e:bd:36:91
+-----------------------------------
+-= pktgen commands =-
+
+Host0:
+set 0 dst mac fa:16:3e:bd:36:91
+set 0 src ip 192.168.42.23/24
+set 0 dst ip 192.168.42.36
+
+Host1:
+set 0 dst mac fa:16:3e:68:94:ca
+set 0 src ip 192.168.42.36/24
+set 0 dst ip 192.168.42.23
+-----------------------------------
+
+```
+##14) Generating traffic in pktgen
+
+* Start generating traffic on port 0 on both instances
+```
+start 0
+```
+
+* To stop traffic
+```
+stop 0
+```
+
+## 15) pktgen parameters
+
+* Packet size
+```
+set 0 size 64
+```
 
 
 
 # Troubleshooting
 
+* Delete all instances 
+```
+openstack server list --all | awk 'NR>2{print $2}' | xargs -Iz openstack server delete z
+```
 
 
 
