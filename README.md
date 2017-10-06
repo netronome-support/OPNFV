@@ -383,7 +383,7 @@ set 0 dst ip 192.168.42.23
 -----------------------------------
 
 ```
-##14) Generating traffic in pktgen
+## 14) Generating traffic in pktgen
 
 * Start generating traffic on port 0 on both instances
 ```
