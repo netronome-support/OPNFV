@@ -1,12 +1,12 @@
 # OPNFV - performance setup scripts
 
-## 0) Clone this repository locally on the Jumphost
+## 1) Clone this repository locally on the Jumphost
 ```
 git clone https://github.com/netronome-support/OPNFV.git
 cd OPNFV
 ```
 
-## 1) Create weaponized image
+## 2) Create weaponized image
 
 * Install virtualization dependencies
 ```
@@ -45,7 +45,7 @@ $script_dir/4_run_vm_scripts.sh
 mv /var/lib/libvirt/images/ubuntu-16.04-server-cloudimg-amd64-disk1.img $script_dir/../uc_netronome/netronome_perf.img 
 ```
 
-## 2) Copy the newly created image(netronome_perf.img) and UC scripts to the Undercloud
+## 3) Copy the newly created image(netronome_perf.img) and UC scripts to the Undercloud
 
 ```
 ./2_copy_files.sh
@@ -61,7 +61,7 @@ script_dir="$(dirname $(readlink -f $0))"
 scp -r $script_dir/uc_netronome stack@$ip:/home/stack/
 ```
 
-## 3) Log into Undercloud and browse to script directory
+## 4) Log into Undercloud and browse to script directory
 ```
 ./3_login_undercloud.sh
 cd uc_netronome
