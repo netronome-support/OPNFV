@@ -122,8 +122,12 @@ nova flavor-key netronome_perf set hw:mem_page_size=2048
 openstack flavor list | grep netronome_perf
 ```
 
-## 8) Create VMs using imported image
+## 8) Create OPNFV instances using imported image
 
+> NOTE: Ensure that the hypervisor generic name matches variable specified in script(3_create_opnfv_vm.sh)
+```
+nova hypervisor-list
+```
 * Create Guest machines with the following script:
 ```
 #usage
@@ -174,7 +178,7 @@ openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port
 
 ```
 
-* Wait for VMs to boot
+* Wait for instances to boot
 
 ```
 watch -d openstack server list
@@ -346,10 +350,15 @@ Launch pktgen
 ```
 ## 13) Configure L2 addresses
 
+Configure destination L2 addresses - This script will help with that
+```
+./7_generate_pktgen_cmds.sh7_generate_pktgen_cmds.sh vm0 vm1
+```
 
 
 
 
+# Troubleshooting
 
 
 
