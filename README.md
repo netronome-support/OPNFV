@@ -399,14 +399,37 @@ stop 0
 
 * Packet size
 ```
-set 0 size 64
+set 0 size [packet size]
 ```
-
-
+> **Note:** It's advised to restart traffic generation to apply new packet size
+```
+stop 0
+start 0
+```
 
 # Troubleshooting
 
+* Ensure the computes have enough free hugepages
+
+```
+cat /proc/meminfo | grep -i huge
+```
+
+* Ensure Agilio bus matches nova configuration
+
+```
+vi /etc/nova/nova.conf
+```
+
+* To generate new whitelisting line
+
+```
+agilio-vf-mgr.py --genwl >> /etc/nova/nova.conf
+service openstack-nova-compute restart
+```
+
 * Delete all instances 
+
 ```
 openstack server list --all | awk 'NR>2{print $2}' | xargs -Iz openstack server delete z
 ```
