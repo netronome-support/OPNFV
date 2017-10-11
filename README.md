@@ -385,6 +385,24 @@ set 0 dst ip 192.168.42.23
 ```
 ## 14) Generating traffic in pktgen
 
+* To start generating traffic on ports
+```
+start [port number]
+
+e.g.
+start 0
+start all
+```
+
+* To stop generating traffic on ports
+```
+stop [port number]
+
+e.g.
+stop 0
+stop all
+```
+
 * Start generating traffic on port 0 on both instances
 ```
 start 0
@@ -434,7 +452,10 @@ service openstack-nova-compute restart
 openstack server list --all | awk 'NR>2{print $2}' | xargs -Iz openstack server delete z
 ```
 
-
+* Display instance interfaces
+```
+nova interface-list [instance name]
+```
 
 
 
