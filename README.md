@@ -403,21 +403,16 @@ stop 0
 stop all
 ```
 
-* Start generating traffic on port 0 on both instances
-```
-start 0
-```
-
-* To stop traffic
-```
-stop 0
-```
 
 ## 15) pktgen parameters
 
 * Packet size
 ```
-set 0 size [packet size]
+set [port number] size [packet size]
+
+e.g.
+set 0 size 700
+set all size 64
 ```
 > **Note:** It's advised to restart traffic generation to apply new packet size
 ```
