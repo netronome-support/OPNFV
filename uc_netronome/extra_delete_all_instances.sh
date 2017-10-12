@@ -2,4 +2,4 @@
 
 . $HOME/adminrc
 
-openstack port list | awk '/demo/{print $2}' | xargs -Iz openstack port delete z
+openstack server list --all | awk 'NR>2{print $2}' | xargs -Iz openstack server delete z
