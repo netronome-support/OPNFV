@@ -1,0 +1,21 @@
+opnfv_yardstick_tc001
+
+SHOW TAG KEYS FROM "opnfv_yardstick_tc002"
+
+SHOW FIELD KEYS FROM "opnfv_yardstick_tc002"
+
+SHOW FIELD VALUES FROM "opnfv_yardstick_tc002" WITH KEY = "rtt.ares"
+
+SELECT "rtt.ares" FROM "opnfv_yardstick_tc002" 
+
+http://172.26.1.38:8086/query?u=root&p=root&db=yardstick&q=SELECT%20%22rtt.ares%22%20FROM%20%22opnfv_yardstick_tc002
+
+http://172.26.1.38:8086/query?u=root&p=root&db=yardstick&q=SELECT%20%22rtt.ares%22%2C%20%22rtt.ares%22%20FROM%20%22opnfv_yardstick_tc002%22%20
+WHERE%20(%22pod_name%22%20%3D~%20%2F%5E(%5C(elxg482ls42%5C%7Cericsson%5C%5C-pod1%5C%7Cericsson%5C%5C-pod2%5C%7C
+huawei%5C%5C-pod1%5C%7Chuawei%5C%5C-pod2%5C%7Chuawei%5C%5C-us%5C%5C-deploy%5C%5C-bare%5C%5C-1%5C%7Cintel%5C%5C-pod5%5C%7C
+intel%5C%5C-pod6%5C%7Clf%5C%5C-pod1%5C%7Clf%5C%5C-pod2%5C%7Copnfv%5C%5C-jump%5C%5C-1%5C%7Copnfv%5C%5C-jump%5C%5C-2%5C%7C
+orange%5C%5C-fr%5C%5C-pod2%5C%7Cunknown%5C%7Czte%5C%5C-pod1%5C))%24%2F%20AND%20%22deploy_scenario%22%20%3D~%20%2F%5C(os%5C%5C-nosdn%5C%5C-nofeature
+%5C%5C-ha%5C%7Cos%5C%5C-nosdn%5C%5C-ovs%5C%5C-ha%5C%7Cos%5C%5C-odl_l2%5C%5C-bgpvpn%5C%5C-ha%5C%7Cos%5C%5C-odl_l2%5C%5C-nofeature%5C%5C-ha%
+5C%7Cos%5C%5C-odl_l2%5C%5C-nofeature%5C%5C-noha%5C%7Cos%5C%5C-odl_l2%5C%5C-sfc%5C%5C-ha%5C%7Cos%5C%5C-odl_l3%5C%5C-nofeature%5C%5C-ha%5C%7Cos%5C%5C-onos%
+5C%5C-nofeature%5C%5C-ha%5C)%24%2F)%20AND%20time%20%3E%3D%20now()%20-%2014d%20GROUP%20BY%20%22pod_name%22%2C%20%22task_id%22%2C%20%22deploy_scenario%22&
+epoch=ms
