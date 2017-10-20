@@ -44,9 +44,10 @@ INSTANCE_NAME=$1
 net_id=`neutron net-show ${NET} | grep "\ id\ " | awk '{ print $4 }'`
 port_id0=`neutron port-create $net_id --name ${PORT_NAME}_0 | grep "\ id\ " | awk '{ print $4 }'`
 port_id1=`neutron port-create $net_id --name ${PORT_NAME}_1 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
+port_id2=`neutron port-create $net_id --name ${PORT_NAME}_2 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
 
-#port_id2=`neutron port-create $net_id --name ${PORT_NAME}_2 --binding:vnic_type ${VNIC_MODE} | grep "\ id\ " | awk '{ print $4 }'`
-openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port_id0} --nic port-id=${port_id1} --security-group default --key markey ${INSTANCE_NAME} --availability-zone nova:$HYPERVISOR$2.netronome.com
+openstack server create --flavor ${FLAVOR} --image ${IMAGE} --nic port-id=${port_id0} --nic port-id=${port_id1} --nic port-id=${port_id2} --security-group default --key markey ${INSTANCE_NAME} --availability-zone nova:$HYPERVISOR$2.netronome.com
 
 
+openstack server list | grep $INSTANCE_NAME
 

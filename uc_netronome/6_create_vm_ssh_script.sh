@@ -5,23 +5,30 @@ if [ -z "$1" ]; then
  exit -1
 fi
 
+instance=$1
 script_dir="$(dirname $(readlink -f $0))"
 
 . $HOME/adminrc 
 
-ip=`openstack server list | awk '/'"$1"'/{print $10}'`
+echo "Determining number of NICs.. "
+num_nics=$((`nova interface-list $instance | wc -l` - 4))
+echo "Found $num_nics"
+num_nics=$((num_nics+8))
+ip=`openstack server list | awk '/'"$instance"'/{print $'"$num_nics"'}'`
+
+echo "Public IP: $ip"
 
 if [ -z "$ip" ]; then
- echo "Instance doesn't exist: $1"
+ echo "Instance doesn't exist: $instance"
  exit -1
 fi
 
 
 cd $script_dir
 
-rm -rf ssh_to_$1
-cat > ssh_to_$1 << EOF
+rm -rf ssh_to_$instance
+cat > ssh_to_$instance << EOF
 ssh ubuntu@$ip -i markey.pem
 EOF
 
-chmod a+x ssh_to_$1
+chmod a+x ssh_to_$instance
