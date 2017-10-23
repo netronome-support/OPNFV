@@ -356,7 +356,7 @@ Modify the following parameters when using more ports(For maximum performance pi
 vi 3_run_dpdk-pktgen.sh
 ```
 
-In this example we'll assume **two** ports, hence **(2 x 2) four** packet queues. The first CPU assigned to pktgen is used for basic program features and is **not** to be assigned to any queues.
+In this example we'll assume **two** ports, hence **(2 x (TX + RX)) four** packet queues. The first CPU assigned to pktgen is used for basic program features and is **not** to be assigned to any of the queues.
 
 We therefore require 5 CPUs to cater for two ports:
 ```
