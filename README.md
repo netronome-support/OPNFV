@@ -329,7 +329,7 @@ Delete the existing host key with the following command:
 sed -i 10d ~/.ssh/known_hosts
 ```
 
-## 12) Run dpdk-pktgen
+# dpdk-pktgen
 
 Once in the VM, switch to root and navigate to the DPDK-pktgen folder.
 
@@ -344,10 +344,44 @@ Assign hugepages and bind the igb_uio driver to the Netronome interfaces.
 ./2_auto_bind_igb_uio.sh
 ```
 
-Launch pktgen
+
+
+12) Configure and Launch pktgen
+
+* Configure pktgen
+>**Note:** Default configuration assumes a single port and pins distinct CPUs to TX and RX queues
+
+Modify the following parameters when using more ports(For maximum performance pin distinct CPUs to all TX and RX queues):
+```
+vi 3_run_dpdk-pktgen.sh
+```
+
+In this example we'll assume **two** ports, hence **(2 x 2) four** packet queues. The first CPU assigned to pktgen is used for basic program features and is **not** to be assigned to any queues.
+
+We therefore require 5 CPUs to cater for two ports:
+```
+#Specify total number of cores
+lcores="-l 1-5"
+
+#Map cores to queues
+mapping="-m [2:3].0 -m [4:5].1"
+```
+
+
+* Launch pktgen
 ```
 ./3_run_dpdk-pktgen.sh
 ```
+
+>**Note:** Ensure distinct queue mapping for maximum performance
+```
+=== port to lcore mapping table (# lcores 5) ===
+   lcore:    1       2       3       4       5      Total
+port   0: ( D: T) ( 1: 0) ( 0: 1) ( 0: 0) ( 0: 0) = ( 1: 1)
+port   1: ( D: T) ( 0: 0) ( 0: 0) ( 1: 0) ( 0: 1) = ( 1: 1)
+Total   : ( 0: 0) ( 1: 0) ( 0: 1) ( 1: 0) ( 0: 1)
+```
+
 ## 13) Configure L2 addresses
 
 Configure destination L2 addresses - This script will help with that
