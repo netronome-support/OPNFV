@@ -512,6 +512,10 @@ cat /proc/meminfo | grep -i huge
 * Ensure Agilio bus matches nova configuration
 
 ```
+# View bus mapping
+lspci -kd 19ee:
+
+# Review mapping
 vi /etc/nova/nova.conf
 ```
 
