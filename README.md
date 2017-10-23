@@ -545,8 +545,3 @@ nova interface-list [instance name]
 
 
 
-
-
-
-
-
