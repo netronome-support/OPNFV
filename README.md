@@ -461,26 +461,30 @@ start 0
 * Determine instance name on hypervisor
 ```
 # openstack server show [instance name] | grep "instance_name\|hypervisor"
+
 e.g.
-# openstack server show **vm6** | grep "instance_name\|hypervisor"
+# openstack server show vm6 | grep "instance_name\|hypervisor"
+
 | OS-EXT-SRV-ATTR:hypervisor_hostname  | overcloud-novacompute-1.netronome.com                                 |
 | OS-EXT-SRV-ATTR:instance_name        | instance-000001a6 
 ```
 
-* SSH to hypervisor with respective instance
+* SSH to hypervisor containing the respective instance
 ```
 ./5_create_uc_ssh_script.sh 0
-ssh_to_overcloud-novacompute-0
+./ssh_to_overcloud-novacompute-0
 ```
 
 * Pin CPUs
 ```
 # virsh list
+
  Id    Name                           State
 ----------------------------------------------------
  100   instance-000001a6              running
 
 # virsh vcpupin 100
+
 VCPU: CPU Affinity
 ----------------------------------
    0: 2-5,14-17
@@ -488,6 +492,7 @@ VCPU: CPU Affinity
    2: 2-5,14-17
 
 # pin CPUs
+
 # virsh vcpupin [instance_name] [Virtual CPU] [CPU]
 
 e.g.
@@ -495,8 +500,6 @@ virsh vcpupin 100 0 2
 virsh vcpupin 100 1 3
 ...
 ```
-
-* Login to 
 
 # Troubleshooting
 
