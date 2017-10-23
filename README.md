@@ -454,6 +454,46 @@ stop 0
 start 0
 ```
 
+# Performance tuning
+
+## Pin Virtual CPUs
+
+* Determine instance name
+```
+openstack server show [instance name] | grep "instance_name\|hypervisor"
+```
+
+* SSH to hypervisor with respective instance
+```
+./5_create_uc_ssh_script.sh 0
+ssh_to_overcloud-novacompute-0
+```
+
+* Pin CPUs
+```
+# virsh list
+ Id    Name                           State
+----------------------------------------------------
+ 100   instance-000001a6              running
+
+# virsh vcpupin 100
+VCPU: CPU Affinity
+----------------------------------
+   0: 2-5,14-17
+   1: 2-5,14-17
+   2: 2-5,14-17
+
+# pin CPUs
+# virsh vcpupin [instance_name] [Virtual CPU] [CPU]
+
+e.g.
+virsh vcpupin 100 0 2
+virsh vcpupin 100 1 3
+...
+```
+
+* Login to 
+
 # Troubleshooting
 
 * Ensure the computes have enough free hugepages
