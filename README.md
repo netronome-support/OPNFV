@@ -346,7 +346,7 @@ Assign hugepages and bind the igb_uio driver to the Netronome interfaces.
 
 
 
-12) Configure and Launch pktgen
+## 12) Configure and Launch pktgen
 
 * Configure pktgen
 >**Note:** Default configuration assumes a single port and pins distinct CPUs to TX and RX queues
