@@ -458,9 +458,13 @@ start 0
 
 ## Pin Virtual CPUs
 
-* Determine instance name
+* Determine instance name on hypervisor
 ```
-openstack server show [instance name] | grep "instance_name\|hypervisor"
+# openstack server show [instance name] | grep "instance_name\|hypervisor"
+e.g.
+# openstack server show **vm6** | grep "instance_name\|hypervisor"
+| OS-EXT-SRV-ATTR:hypervisor_hostname  | overcloud-novacompute-1.netronome.com                                 |
+| OS-EXT-SRV-ATTR:instance_name        | instance-000001a6 
 ```
 
 * SSH to hypervisor with respective instance
