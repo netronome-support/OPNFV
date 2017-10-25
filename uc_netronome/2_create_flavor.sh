@@ -3,7 +3,7 @@
 . $HOME/adminrc
 
 openstack flavor delete netronome_perf
-openstack flavor create --ram 4096 --disk 8 --vcpus 6 netronome_perf \
+openstack flavor create --ram 4096 --disk 8 --vcpus 4 netronome_perf \
 #--property hw_cpu_policy=dedicated \
 #--property hw_cpu_thread_policy=isolate
 
